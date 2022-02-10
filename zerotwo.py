@@ -1,5 +1,5 @@
 
-from pyrogram import Client , filters
+from pyrogram import Client , filters, errors
 import wget
 import os
 from pyrogram.types import InlineKeyboardButton , InlineKeyboardMarkup
@@ -135,8 +135,11 @@ async def promote (client , message):
             await ZeroTwo.send_message(chat_id, "promoted successfully")
         else:
             await message.reply_text("You don't have enough rights!!")
-    except:
-        await message.reply_text("ERROR OCCURED TRY CONTACTING OUR SUPPORT GROUP")
+    except errors.exceptions.bad_request_400.ChatAdminRequired:
+        await message.reply_text("I need `Add new admins` right to do this")
+    except Exception as e:
+        print(e)
+        await message.reply_text("Error Occured Report in Support Group!!")
 
 @ZeroTwo.on_message(filters.command(["pin"]))
 async def pin (client , message):
